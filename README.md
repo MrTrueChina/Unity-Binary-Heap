@@ -1,2 +1,5 @@
-# Unity-Binary-Heap
-二叉堆，只要是C#都能用，不一定要Unity
+# 二叉堆
+
+附带了一个展示效果的Scene
+
+只要是C#都能用，不一定要Unity

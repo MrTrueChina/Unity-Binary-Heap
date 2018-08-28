@@ -18,16 +18,4 @@ public static class ListExtension
         list[indexA] = list[indexB];
         list[indexB] = temporary;
     }
-
-    /// <summary>
-    /// 返回List最后一个元素
-    /// </summary>
-    /// <typeparam name="T"></typeparam>
-    /// <param name="list"></param>
-    /// <returns></returns>
-    public static T Last<T>(this List<T> list)
-    {
-        return list[list.Count - 1];
-    }
 }
-

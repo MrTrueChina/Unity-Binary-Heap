@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using System.Linq;
 
 /*
  * 二叉堆，二叉树的变体，常见的二叉堆是最大堆和最小堆，这个例子是最小堆
@@ -44,13 +45,13 @@ public class MinBinaryHeap
     /// </summary>
     void BottomToTop()
     {
-        int currentIndex = _nodes.Count - 1;                         //正在进行调整的元素的下标，最开始是最末尾
+        int currentIndex = _nodes.Count - 1;                        //正在进行调整的元素的下标，最开始是最末尾
 
         while (currentIndex != 0 && _nodes[currentIndex] < _nodes[GetParentIndex(currentIndex)])  //现在正在调整的元素不是根元素，并且值比父节点小   父节点下标 = (当前节点下标 - 1) / 2，不分左右
         {
             int parentIndex = GetParentIndex(currentIndex);         //计算并存储父节点的下标
 
-            _nodes.Swap(currentIndex, parentIndex);                  //交换两个节点，用的是扩展方法
+            _nodes.Swap(currentIndex, parentIndex);                 //交换两个节点，用的是扩展方法
 
             currentIndex = parentIndex;                             //将检测元素下标改为父节点下标
         }

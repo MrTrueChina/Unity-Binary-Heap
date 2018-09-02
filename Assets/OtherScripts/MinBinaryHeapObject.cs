@@ -8,12 +8,12 @@ public class MinBinaryHeapObject : MonoBehaviour
     [SerializeField]
     Text _displayText;
 
-    static MinBinaryHeap _binaryHeap;
+    static MinBinaryHeapDemo _binaryHeap;
 
 
     private void Awake()
     {
-        _binaryHeap = new MinBinaryHeap();
+        _binaryHeap = new MinBinaryHeapDemo();
     }
 
 

@@ -535,6 +535,20 @@ public class MinBinaryHeapTest
         Assert.IsTrue(heap.isEmpty);
     }
 
+    [Test]
+    public void Count_Normal()
+    {
+        MinBinaryHeap<string> heap = new MinBinaryHeap<string>();
+
+        Assert.AreEqual(0, heap.Count);
+
+        heap.SetNode("Hello World", 1024);
+        Assert.AreEqual(1, heap.Count);
+
+        heap.RemoveFirstThroughValue(1024);
+        Assert.AreEqual(0, heap.Count);
+    }
+
 
     [Test]
     public void Swap_Normal()

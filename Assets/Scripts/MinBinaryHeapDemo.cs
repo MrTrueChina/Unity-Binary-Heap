@@ -28,7 +28,7 @@ using System.Linq;
 /// <summary>
 /// 最简单的最小堆，存入float排序，仅做演示用，没有实用价值
 /// </summary>
-public class MinBinaryHeap
+public class MinBinaryHeapDemo
 {
     List<float> _nodes = new List<float>();
 

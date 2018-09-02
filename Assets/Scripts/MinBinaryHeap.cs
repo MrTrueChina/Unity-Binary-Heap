@@ -54,6 +54,15 @@ public class MinBinaryHeap<T>
 
         RemoveAt(removeIndex);
     }
+    public void RemoveNode(MinBinaryHeapNode<T> node)
+    {
+        for (int i = 0; i < _nodes.Count; i++)
+            if (_nodes[i].Equals(node))
+            {
+                RemoveAt(i);
+                return;
+            }
+    }
     public void RemoveAt(int removeIndex)
     {
         if (removeIndex < 0 || removeIndex >= _nodes.Count) return;

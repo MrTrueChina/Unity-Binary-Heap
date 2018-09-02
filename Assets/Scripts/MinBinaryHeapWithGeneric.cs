@@ -5,7 +5,7 @@ using System.Linq;
 /// 二叉堆节点，保存了数值和映射的目标
 /// </summary>
 /// <typeparam name="T"></typeparam>
-public struct Node<T>
+public struct MinBinaryHeapNode<T>
 {
     public T obj;
     public float value;
@@ -15,13 +15,13 @@ public struct Node<T>
 /// 添加泛型，可以通过节点的 obj 获取到存入的对象
 /// </summary>
 /// <typeparam name="T"></typeparam>
-public class MinBinaryHeapWithGeneric<T>
+public class MinBinaryHeap<T>
 {
-    List<Node<T>> _nodes = new List<Node<T>>();
+    List<MinBinaryHeapNode<T>> _nodes = new List<MinBinaryHeapNode<T>>();
 
 
     //存入
-    public void SetNode(Node<T> newNode)
+    public void SetNode(MinBinaryHeapNode<T> newNode)
     {
         _nodes.Add(newNode);
 
@@ -29,7 +29,7 @@ public class MinBinaryHeapWithGeneric<T>
     }
     public void SetNode(T obj, float value)
     {
-        SetNode(new Node<T> { obj = obj, value = value });
+        SetNode(new MinBinaryHeapNode<T> { obj = obj, value = value });
     }
     
 
@@ -158,7 +158,7 @@ public class MinBinaryHeapWithGeneric<T>
     //查询
     public bool ContainsValue(float value)
     {
-        foreach (Node<T> node in _nodes)
+        foreach (MinBinaryHeapNode<T> node in _nodes)
             if (node.value == value)
                 return true;
         return false;
@@ -166,17 +166,34 @@ public class MinBinaryHeapWithGeneric<T>
 
     public T FindFirstThroughValue(float value)
     {
-        foreach (Node<T> node in _nodes)
+        foreach (MinBinaryHeapNode<T> node in _nodes)
             if (node.value == value)
                 return node.obj;
         return default(T);
     }
 
+    public bool isEmpty
+    {
+        get { return _nodes == null || _nodes.Count == 0; }
+    }
+
 
 
     //测试代码
-    public List<Node<T>> GetNodes()
+    public List<MinBinaryHeapNode<T>> GetNodes()
     {
         return _nodes;
+    }
+}
+
+public static partial class ListExtension       //partical：加了这个关键字的类可以分开写在多个地方，比如这里给List增加Swap扩展方法，因为有partical所以能在别的.cs文件里添加其他方法而他们又共同属于同一个ListExtension类
+{
+    public static void Swap<T>(this List<T> list, int aIndex, int bIndex)
+    {
+        if (aIndex < 0 || aIndex >= list.Count || bIndex < 0 || bIndex >= list.Count) return;
+
+        T temporary = list[aIndex];
+        list[aIndex] = list[bIndex];
+        list[bIndex] = temporary;
     }
 }

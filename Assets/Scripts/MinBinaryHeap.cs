@@ -186,6 +186,11 @@ public class MinBinaryHeap<T>
         get { return _nodes == null || _nodes.Count == 0; }
     }
 
+    public int Count
+    {
+        get { return _nodes.Count; }
+    }
+
 
 
     //测试代码

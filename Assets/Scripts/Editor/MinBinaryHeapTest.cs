@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using NUnit.Framework;
+using UnityEngine;
 
 /*
  *  测试代码，需要 using NUnit.Fra,ework
@@ -267,7 +268,7 @@ public class MinBinaryHeapTest
 
 
     [Test]
-    public void RemoveNode_Normal_Null()
+    public void RemoveFirstThroughValue_Normal_Null()
     {
         MinBinaryHeap<string> binary = new MinBinaryHeap<string>();
 
@@ -336,6 +337,76 @@ public class MinBinaryHeapTest
 
 
         binary.RemoveFirstThroughValue(199);
+
+        valueExpected = new float[13] { 0, 4, 2, 4, 7, 5, 3, 8, 9, 9, 8, 6, 7 };
+
+        for (int i = 0; i < 13; i++)
+            Assert.AreEqual(valueExpected[i], nodes[i].value);
+    }
+
+
+    [Test]
+    public void RemoveNode_Normal()
+    {
+        MinBinaryHeap<string> binary = new MinBinaryHeap<string>();
+
+        /*
+         *  0 5 2 6 7 5 3 8 9 9 8 6 7 4 4
+         *  
+         *         0
+         *     5       2
+         *   6   7   5   3
+         *  8 9 9 8 6 7 4 4
+         *  
+         *  
+         *  remove 6
+         *  
+         *         0
+         *     4       2
+         *   5   7   5   3
+         *  8 9 9 8 6 7 4
+         *  
+         *  0 4 2 5 7 5 3 8 9 9 8 6 7 4
+         *  
+         *  
+         *  remove 5
+         *  
+         *         0
+         *     4       2
+         *   4   7   5   3
+         *  8 9 9 8 6 7
+         *  
+         *  0 4 2 4 7 5 3 8 9 9 8 6 7
+         */
+
+        binary.SetNode(null, 0);
+        binary.SetNode(null, 5);
+        binary.SetNode(null, 2);
+        binary.SetNode(null, 6);
+        binary.SetNode(null, 7);
+        binary.SetNode(null, 5);
+        binary.SetNode(null, 3);
+        binary.SetNode(null, 8);
+        binary.SetNode(null, 9);
+        binary.SetNode(null, 9);
+        binary.SetNode(null, 8);
+        binary.SetNode(null, 6);
+        binary.SetNode(null, 7);
+        binary.SetNode(null, 4);
+        binary.SetNode(null, 4);
+
+        List<MinBinaryHeapNode<string>> nodes = binary.GetNodes();
+
+        
+        binary.RemoveNode(nodes[3]);    //nodes[3]是 6
+
+        float[] valueExpected = new float[14] { 0, 4, 2, 5, 7, 5, 3, 8, 9, 9, 8, 6, 7, 4 };
+
+        for (int i = 0; i < 14; i++)
+            Assert.AreEqual(valueExpected[i], nodes[i].value);
+
+
+        binary.RemoveNode(nodes[3]);    //nodes[3]是 5
 
         valueExpected = new float[13] { 0, 4, 2, 4, 7, 5, 3, 8, 9, 9, 8, 6, 7 };
 

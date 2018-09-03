@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using System.Linq;
+using UnityEngine;
 
 /// <summary>
 /// 二叉堆节点，保存了数值和映射的目标
@@ -54,6 +55,12 @@ public class MinBinaryHeap<T>
 
         RemoveAt(removeIndex);
     }
+    public void RemoveFirstThroughObj(T obj)
+    {
+        int removeIndex = FindFirstIndexThroughObj(obj);
+
+        RemoveAt(removeIndex);
+    }
     public void RemoveNode(MinBinaryHeapNode<T> node)
     {
         for (int i = 0; i < _nodes.Count; i++)
@@ -75,14 +82,20 @@ public class MinBinaryHeap<T>
 
 
         _nodes[lastLeftIndex] = _nodes.Last();
-        _nodes.RemoveAt(_nodes.Count - 1);
-
         BottomToTop(lastLeftIndex);
+        _nodes.RemoveAt(_nodes.Count - 1);
     }
     int FindFirstIndexThroughValue(float value)
     {
         for (int i = 0; i < _nodes.Count; i++)
             if (_nodes[i].value == value)
+                return i;
+        return -1;
+    }
+    int FindFirstIndexThroughObj(T obj)
+    {
+        for (int i = 0; i < _nodes.Count; i++)
+            if (_nodes[i].obj.Equals(obj))
                 return i;
         return -1;
     }
@@ -95,6 +108,7 @@ public class MinBinaryHeap<T>
 
         return GetParentIndex(nextLeftChildIndex);                          //返回这个下标的父节点下标，就是最远的左子节点
     }
+
     void TopToBottom(int startIndex)
     {
         int currentIndex = startIndex;  //记录正在调整的元素的下标
@@ -103,7 +117,7 @@ public class MinBinaryHeap<T>
         {
             int smallerChildIndex = FindSmallerChind(currentIndex);     //获取比较小的那个子节点的下标
 
-            if (smallerChildIndex > 0 && _nodes[smallerChildIndex].value < _nodes[currentIndex].value)    //如果有子节点，并且比较大的子节点的值比当前节点小
+            if (smallerChildIndex > 0 && _nodes[smallerChildIndex].value < _nodes[currentIndex].value)    //如果有子节点，并且比较小的子节点的值比当前节点小
             {
                 _nodes.Swap(currentIndex, smallerChildIndex);           //交换当前节点和比较小的子节点
 
@@ -111,7 +125,7 @@ public class MinBinaryHeap<T>
             }
             else
             {
-                break;                  //没有子节点或者较大的子节点的值比当前节点的值小，则说明调整完成，跳出循环
+                break;                  //没有子节点或者较小的子节点的值比当前节点的值小，则说明调整完成，跳出循环
             }
         }
     }
@@ -122,13 +136,12 @@ public class MinBinaryHeap<T>
         while (currentIndex != 0 && _nodes[currentIndex].value < _nodes[GetParentIndex(currentIndex)].value)  //现在正在调整的元素不是根元素，并且值比父节点小   父节点下标 = (当前节点下标 - 1) / 2，不分左右
         {
             int parentIndex = GetParentIndex(currentIndex);         //计算并存储父节点的下标
-
+            
             _nodes.Swap(currentIndex, parentIndex);                 //交换两个节点，用的是扩展方法
-
+            
             currentIndex = parentIndex;                             //将检测元素下标改为父节点下标
         }
     }
-
 
     int FindSmallerChind(int parentIndex)
     {
@@ -190,10 +203,7 @@ public class MinBinaryHeap<T>
     {
         get { return _nodes.Count; }
     }
-
-
-
-    //测试代码
+    
     public List<MinBinaryHeapNode<T>> GetNodes()
     {
         return _nodes;

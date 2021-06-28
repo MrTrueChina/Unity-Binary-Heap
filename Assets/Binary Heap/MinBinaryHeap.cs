@@ -2,7 +2,7 @@ using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
 
-namespace Mtc.Tools.BinaryHeap
+namespace MtC.Tools.BinaryHeap
 {
     /// <summary>
     /// 二叉堆节点，保存了数值和映射的目标

@@ -3,7 +3,7 @@ using NUnit.Framework;
 using UnityEngine;
 
 
-namespace Mtc.Tools.BinaryHeap
+namespace MtC.Tools.BinaryHeap
 {
     /*
      *  测试代码，需要 using NUnit.Fra,ework

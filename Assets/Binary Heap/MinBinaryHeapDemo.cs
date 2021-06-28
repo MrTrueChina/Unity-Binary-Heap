@@ -1,7 +1,7 @@
 using System.Collections.Generic;
 using System.Linq;
 
-namespace Mtc.Tools.BinaryHeap
+namespace MtC.Tools.BinaryHeap
 {
     /*
      * 二叉堆，二叉树的变体，常见的二叉堆是最大堆和最小堆，这个例子是最小堆

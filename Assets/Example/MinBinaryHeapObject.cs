@@ -1,43 +1,47 @@
 using UnityEngine;
 using UnityEngine.UI;
 
-public class MinBinaryHeapObject : MonoBehaviour
+namespace MtC.Tools.BinaryHeap
 {
-    [SerializeField]        //让private的变量在inspector面板显示
-    InputField _input;
-    [SerializeField]
-    Text _displayText;
 
-    static MinBinaryHeapDemo _binaryHeap;
-
-
-    private void Awake()
+    public class MinBinaryHeapObject : MonoBehaviour
     {
-        _binaryHeap = new MinBinaryHeapDemo();
-    }
+        [SerializeField]        //让private的变量在inspector面板显示
+        InputField _input;
+        [SerializeField]
+        Text _displayText;
+
+        static MinBinaryHeapDemo _binaryHeap;
 
 
-    public void SetInputValueToBinaryHeap()
-    {
-        _binaryHeap.SetValue(float.Parse(_input.text));
+        private void Awake()
+        {
+            _binaryHeap = new MinBinaryHeapDemo();
+        }
 
-        DisplayBinaryHeap();
-    }
 
-    public void RemoveBinaryHeapTopNode()
-    {
-        _binaryHeap.RemoveTop();
+        public void SetInputValueToBinaryHeap()
+        {
+            _binaryHeap.SetValue(float.Parse(_input.text));
 
-        DisplayBinaryHeap();
-    }
+            DisplayBinaryHeap();
+        }
 
-    public void PrintBinaryHeapTopValue()
-    {
-        Debug.Log(_binaryHeap.GetTop());
-    }
+        public void RemoveBinaryHeapTopNode()
+        {
+            _binaryHeap.RemoveTop();
 
-    void DisplayBinaryHeap()
-    {
-        _displayText.text = _binaryHeap.Print();
+            DisplayBinaryHeap();
+        }
+
+        public void PrintBinaryHeapTopValue()
+        {
+            Debug.Log(_binaryHeap.GetTop());
+        }
+
+        void DisplayBinaryHeap()
+        {
+            _displayText.text = _binaryHeap.Print();
+        }
     }
 }

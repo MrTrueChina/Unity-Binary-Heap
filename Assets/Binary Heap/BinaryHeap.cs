@@ -1,59 +1,51 @@
 using System.Collections.Generic;
 using System.Linq;
-using UnityEngine;
+using System;
 
 namespace MtC.Tools.BinaryHeap
 {
     /// <summary>
-    /// 二叉堆节点，保存了数值和映射的目标
+    /// 二叉堆节点
     /// </summary>
     /// <typeparam name="T"></typeparam>
-    public struct MinBinaryHeapNode<T>
+    public struct BinaryHeapNode<T>
     {
         /// <summary>
-        /// 对象
+        /// 这个节点对应的对象
         /// </summary>
         public T obj;
+
         /// <summary>
-        /// 值
+        /// 构造
         /// </summary>
-        public float value;
+        /// <param name="obj"></param>
+        public BinaryHeapNode(T obj)
+        {
+            this.obj = obj;
+        }
     }
 
     /// <summary>
     /// 添加泛型，可以通过节点的 obj 获取到存入的对象
     /// </summary>
     /// <typeparam name="T"></typeparam>
-    public class MinBinaryHeap<T>
+    public abstract class BinaryHeap<T>
     {
-        List<MinBinaryHeapNode<T>> nodes = new List<MinBinaryHeapNode<T>>();
-
-
         /// <summary>
-        /// 存入节点
+        /// 所有节点
         /// </summary>
-        /// <param name="newNode"></param>
-        public void SetNode(MinBinaryHeapNode<T> newNode)
-        {
-            // 存入节点列表
-            nodes.Add(newNode);
-
-            // 从下向上更新
-            BottomToTop(nodes.Count - 1);
-        }
+        private List<BinaryHeapNode<T>> nodes = new List<BinaryHeapNode<T>>();
 
         /// <summary>
-        /// 存入节点
+        /// 比较两个节点，返回负数表示 节点a 更接近堆顶，返回正数表示 节点b 更接近堆顶，返回 0 表示两个节点比较上相同
         /// </summary>
-        /// <param name="obj"></param>
-        /// <param name="value"></param>
-        public void SetNode(T obj, float value)
-        {
-            SetNode(new MinBinaryHeapNode<T> { obj = obj, value = value });
-        }
+        /// <param name="a"></param>
+        /// <param name="b"></param>
+        /// <returns></returns>
+        public abstract int Comparison(BinaryHeapNode<T> a, BinaryHeapNode<T> b);
 
         /// <summary>
-        /// 获取堆顶节点
+        /// 获取堆顶节点的对象
         /// </summary>
         /// <returns></returns>
         public T GetTopNodeObject()
@@ -69,42 +61,16 @@ namespace MtC.Tools.BinaryHeap
         }
 
         /// <summary>
-        /// 移除堆顶节点
-        /// </summary>
-        public void RemoveTop()
-        {
-            // 二叉堆的结构决定了第一个节点就是堆顶
-            RemoveAt(0);
-        }
-
-        /// <summary>
         /// 移除第一个指定的对象的节点
         /// </summary>
         /// <param name="obj"></param>
         public void RemoveFirstThroughObj(T obj)
         {
-            // 通过对象找到第一个节点
-            int removeIndex = FindFirstIndexThroughObj(obj);
+            // 找到第一个是指定对象的节点
+            int removeIndex = nodes.FindIndex(node => Equals(node.obj, obj));
 
             // 删除掉
             RemoveAt(removeIndex);
-        }
-
-        /// <summary>
-        /// 移除指定的节点
-        /// </summary>
-        /// <param name="node"></param>
-        public void RemoveNode(MinBinaryHeapNode<T> node)
-        {
-            // XXX：只会移除第一个
-            for (int i = 0; i < nodes.Count; i++)
-            {
-                if (nodes[i].Equals(node))
-                {
-                    RemoveAt(i);
-                    return;
-                }
-            }
         }
 
         /// <summary>
@@ -131,24 +97,6 @@ namespace MtC.Tools.BinaryHeap
 
             // 移除多出来的最后一个节点
             nodes.RemoveAt(nodes.Count - 1);
-        }
-
-        /// <summary>
-        /// 根据对象查找第一个节点索引
-        /// </summary>
-        /// <param name="obj"></param>
-        /// <returns></returns>
-        private int FindFirstIndexThroughObj(T obj)
-        {
-            for (int i = 0; i < nodes.Count; i++)
-            {
-                if (nodes[i].obj.Equals(obj))
-                {
-                    return i;
-                }
-            }
-
-            return -1;
         }
 
         /// <summary>
@@ -186,8 +134,8 @@ namespace MtC.Tools.BinaryHeap
                 //获取比较小的那个子节点的索引
                 int smallerChildIndex = FindSmallerChind(currentIndex);
 
-                //如果有子节点，并且比较小的子节点的值比当前节点小
-                if (smallerChildIndex > 0 && nodes[smallerChildIndex].value < nodes[currentIndex].value)
+                //如果有子节点，并且比较小的子节点比当前节点更应该接近堆顶
+                if (smallerChildIndex > 0 && Comparison(nodes[smallerChildIndex], nodes[currentIndex]) < 0)
                 {
                     //交换当前节点和比较小的子节点
                     nodes.Swap(currentIndex, smallerChildIndex);
@@ -197,7 +145,7 @@ namespace MtC.Tools.BinaryHeap
                 }
                 else
                 {
-                    //没有子节点或者较小的子节点的值比当前节点的值小，则说明调整完成，跳出循环
+                    //没有子节点或者较小的子节点比当前节点更应该接近堆底，则说明调整完成，跳出循环
                     break;
                 }
             }
@@ -212,8 +160,8 @@ namespace MtC.Tools.BinaryHeap
             //正在进行调整的元素的索引
             int currentIndex = startIndex;
 
-            //现在正在调整的元素不是根元素，并且值比父节点小
-            while (currentIndex != 0 && nodes[currentIndex].value < nodes[GetParentIndex(currentIndex)].value)
+            //现在正在调整的元素不是根元素，并且比父节更应该接近堆顶
+            while (currentIndex != 0 && Comparison(nodes[currentIndex], nodes[GetParentIndex(currentIndex)]) < 0)
             {
                 //先保存父节点的索引
                 int parentIndex = GetParentIndex(currentIndex);
@@ -227,7 +175,7 @@ namespace MtC.Tools.BinaryHeap
         }
 
         /// <summary>
-        /// 查找一个节点的值比较小的子节点
+        /// 查找子节点中更应该接近堆顶的子节点的索引
         /// </summary>
         /// <param name="parentIndex"></param>
         /// <returns></returns>
@@ -239,7 +187,7 @@ namespace MtC.Tools.BinaryHeap
                 return -1;
             }
 
-            // 没有右子节点，则做子节点就是比较小的那个子节点
+            // 没有右子节点，则做子节点就是更应该接近堆顶的那个子节点
             if (!HaveRightChildNode(parentIndex))
             {
                 return GetLeftChildIndex(parentIndex);
@@ -249,8 +197,8 @@ namespace MtC.Tools.BinaryHeap
             int leftChildIndex = GetLeftChildIndex(parentIndex);
             int rightChildIndex = GetRightChildIndex(parentIndex);
 
-            // 返回值比较小的那个
-            return nodes[leftChildIndex].value < nodes[rightChildIndex].value ? leftChildIndex : rightChildIndex;
+            // 返回更应该接近堆顶的那个，一样的话返回哪个都行
+            return Comparison(nodes[leftChildIndex], nodes[rightChildIndex]) < 0 ? leftChildIndex : rightChildIndex;
         }
 
         /// <summary>
@@ -306,9 +254,12 @@ namespace MtC.Tools.BinaryHeap
         /// <summary>
         /// 这个二叉堆是不是空的
         /// </summary>
-        public bool isEmpty
+        public bool IsEmpty
         {
-            get { return nodes == null || nodes.Count == 0; }
+            get
+            {
+                return Count == 0;
+            }
         }
 
         /// <summary>
@@ -316,16 +267,10 @@ namespace MtC.Tools.BinaryHeap
         /// </summary>
         public int Count
         {
-            get { return nodes.Count; }
-        }
-
-        /// <summary>
-        /// 这个二叉堆的节点列表
-        /// </summary>
-        /// <returns></returns>
-        public List<MinBinaryHeapNode<T>> GetNodes()
-        {
-            return nodes;
+            get
+            {
+                return nodes.Count;
+            }
         }
     }
 

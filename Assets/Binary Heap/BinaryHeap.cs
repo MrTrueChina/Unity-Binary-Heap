@@ -4,26 +4,6 @@ using System;
 
 namespace MtC.Tools.BinaryHeap
 {
-    /// <summary>
-    /// 二叉堆节点
-    /// </summary>
-    /// <typeparam name="T"></typeparam>
-    public struct BinaryHeapNode<T>
-    {
-        /// <summary>
-        /// 这个节点对应的对象
-        /// </summary>
-        public T obj;
-
-        /// <summary>
-        /// 构造
-        /// </summary>
-        /// <param name="obj"></param>
-        public BinaryHeapNode(T obj)
-        {
-            this.obj = obj;
-        }
-    }
 
     /// <summary>
     /// 添加泛型，可以通过节点的 obj 获取到存入的对象
@@ -32,9 +12,30 @@ namespace MtC.Tools.BinaryHeap
     public abstract class BinaryHeap<T>
     {
         /// <summary>
+        /// 节点对象
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        protected class BinaryHeapNode<T>
+        {
+            /// <summary>
+            /// 这个节点对应的对象
+            /// </summary>
+            public T obj;
+
+            /// <summary>
+            /// 构造
+            /// </summary>
+            /// <param name="obj"></param>
+            public BinaryHeapNode(T obj)
+            {
+                this.obj = obj;
+            }
+        }
+
+        /// <summary>
         /// 所有节点
         /// </summary>
-        private List<BinaryHeapNode<T>> nodes = new List<BinaryHeapNode<T>>();
+        protected List<BinaryHeapNode<T>> nodes = new List<BinaryHeapNode<T>>();
 
         /// <summary>
         /// 比较两个节点，返回负数表示 节点a 更接近堆顶，返回正数表示 节点b 更接近堆顶，返回 0 表示两个节点比较上相同
@@ -42,7 +43,23 @@ namespace MtC.Tools.BinaryHeap
         /// <param name="a"></param>
         /// <param name="b"></param>
         /// <returns></returns>
-        public abstract int Comparison(BinaryHeapNode<T> a, BinaryHeapNode<T> b);
+        protected abstract int Comparison(BinaryHeapNode<T> a, BinaryHeapNode<T> b);
+
+        /// <summary>
+        /// 添加对象到堆中
+        /// </summary>
+        /// <param name="obj"></param>
+        public void Add(T obj)
+        {
+            // 创建节点
+            BinaryHeapNode<T> node = new BinaryHeapNode<T>(obj);
+
+            // 加入到节点列表最后面，四叉树的结构导致越靠后的节点在越深的层，这样可以保证存到最底层
+            nodes.Add(node);
+
+            // 以新节点为起点，自下向上调整结构
+            BottomToTop(nodes.Count - 1);
+        }
 
         /// <summary>
         /// 获取堆顶节点的对象
@@ -64,13 +81,21 @@ namespace MtC.Tools.BinaryHeap
         /// 移除第一个指定的对象的节点
         /// </summary>
         /// <param name="obj"></param>
-        public void RemoveFirstThroughObj(T obj)
+        /// <returns>如果删除成功则返回 true，否则返回 false</returns>
+        public bool RemoveFirstThroughObj(T obj)
         {
             // 找到第一个是指定对象的节点
             int removeIndex = nodes.FindIndex(node => Equals(node.obj, obj));
 
-            // 删除掉
+            // 没找到，返回删除失败
+            if(removeIndex < 0)
+            {
+                return false;
+            }
+
+            // 删除掉并返回删除成功
             RemoveAt(removeIndex);
+            return true;
         }
 
         /// <summary>
@@ -249,6 +274,16 @@ namespace MtC.Tools.BinaryHeap
         private int GetRightChildIndex(int parentIndex)
         {
             return parentIndex * 2 + 2;
+        }
+
+        /// <summary>
+        /// 检测堆里是否有指定的对象
+        /// </summary>
+        /// <param name="obj"></param>
+        /// <returns></returns>
+        public bool Contains(T obj)
+        {
+            return nodes.Any(node => Equals(node.obj, obj));
         }
 
         /// <summary>

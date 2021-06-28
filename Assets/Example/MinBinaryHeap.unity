@@ -193,7 +193,7 @@ MonoBehaviour:
     m_HorizontalOverflow: 0
     m_VerticalOverflow: 0
     m_LineSpacing: 1
-  m_Text: "\u79FB\u9664\u5806\u9876\u5143\u7D20"
+  m_Text: "\u79FB\u9664\u6307\u5B9A\u503C\u5143\u7D20"
 --- !u!222 &217561264
 CanvasRenderer:
   m_ObjectHideFlags: 0
@@ -369,7 +369,7 @@ RectTransform:
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
   m_AnchoredPosition: {x: 0, y: -335}
-  m_SizeDelta: {x: 800, y: 555}
+  m_SizeDelta: {x: 1960.0002, y: 555}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &421146871
 MonoBehaviour:
@@ -824,8 +824,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7099fe60a22d76f4293c0b5adddfea5f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _input: {fileID: 2126422759}
-  _displayText: {fileID: 421146871}
+  input: {fileID: 2126422759}
+  displayText: {fileID: 421146871}
 --- !u!4 &985498876
 Transform:
   m_ObjectHideFlags: 0
@@ -1081,8 +1081,8 @@ MonoBehaviour:
     m_PersistentCalls:
       m_Calls:
       - m_Target: {fileID: 985498875}
-        m_TargetAssemblyTypeName: 
-        m_MethodName: RemoveBinaryHeapTopNode
+        m_TargetAssemblyTypeName: MtC.Tools.BinaryHeap.MinBinaryHeapObject, Assembly-CSharp
+        m_MethodName: RemoveFirst
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}

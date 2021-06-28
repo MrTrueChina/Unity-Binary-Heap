@@ -6,42 +6,47 @@ namespace MtC.Tools.BinaryHeap
 
     public class MinBinaryHeapObject : MonoBehaviour
     {
-        [SerializeField]        //璁﹑rivate鐨勫彉閲忓湪inspector闈㈡澘鏄剧ず
-        InputField _input;
         [SerializeField]
-        Text _displayText;
+        private InputField input;
+        [SerializeField]
+        private Text displayText;
 
-        static MinBinaryHeapDemo _binaryHeap;
+        private FloatMinBinaryHeap heap = new FloatMinBinaryHeap();
 
-
-        private void Awake()
-        {
-            _binaryHeap = new MinBinaryHeapDemo();
-        }
-
-
+        /// <summary>
+        /// 向堆里存入新值
+        /// </summary>
         public void SetInputValueToBinaryHeap()
         {
-            _binaryHeap.SetValue(float.Parse(_input.text));
+            heap.Add(float.Parse(input.text));
 
             DisplayBinaryHeap();
         }
 
-        public void RemoveBinaryHeapTopNode()
+        /// <summary>
+        /// 从堆里移除第一个指定的值的节点
+        /// </summary>
+        public void RemoveFirst()
         {
-            _binaryHeap.RemoveTop();
+            heap.RemoveFirstThroughObj(float.Parse(input.text));
 
             DisplayBinaryHeap();
         }
 
+        /// <summary>
+        /// 输出堆顶的值
+        /// </summary>
         public void PrintBinaryHeapTopValue()
         {
-            Debug.Log(_binaryHeap.GetTop());
+            displayText.text = "堆顶的元素：" + heap.GetTopNodeObject();
         }
 
-        void DisplayBinaryHeap()
+        /// <summary>
+        /// 输出堆结构
+        /// </summary>
+        private void DisplayBinaryHeap()
         {
-            _displayText.text = _binaryHeap.Print();
+            displayText.text = heap.Print();
         }
     }
 }

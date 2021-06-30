@@ -70,12 +70,79 @@ namespace MtC.Tools.BinaryHeap
 
         // —————— 删除 ——————
 
-        // TODO：删除第一个指定的内容
+        /// <summary>
+        /// 删除第一个指定的内容
+        /// </summary>
+        /// <param name="elements"></param>
+        /// <param name="removeNum"></param>
+        /// <param name="expectedList"></param>
+        [Test]
+        [TestCase(new int[] { 1, 3, 5, 0, 8 }, 0, new int[] { 1, 3, 5, 8 })]
+        [TestCase(new int[] { 1 }, 1, new int[] { })]
+        [TestCase(new int[] { 1, 3, 2 }, 1, new int[] { 2, 3 })]
+        public void Remove(int[] elements, int removeNum, int[] expectedList)
+        {
+            IntMinHeap heap = new IntMinHeap();
 
-        // TODO：删除所有符合要求的内容
-        // TODO：极端情况：全删除
+            foreach (int element in elements)
+            {
+                heap.Add(element);
+            }
 
-        // TODO：删除不存在的内容
+            bool removeResult = heap.Remove(removeNum);
+
+            List<int> numList = heap.GetList();
+
+            for (int i = 0; i < numList.Count; i++)
+            {
+                Assert.AreEqual(expectedList[i], numList[i]);
+            }
+            Assert.AreEqual(true, removeResult);
+        }
+
+        /// <summary>
+        /// 删除第一个指定的内容，没有指定内容的情况
+        /// </summary>
+        [Test]
+        public void RemoveNone()
+        {
+            IntMinHeap heap = new IntMinHeap();
+
+            heap.Add(1);
+
+            bool removeResult = heap.Remove(0);
+
+            Assert.AreEqual(false, removeResult);
+        }
+
+        /// <summary>
+        /// 移除所有符合条件的元素
+        /// </summary>
+        /// <param name="elements"></param>
+        /// <param name="removeNum"></param>
+        /// <param name="expectedList"></param>
+        [Test]
+        [TestCase(new int[] { 1, 3, 5, 0, 8 }, -1, new int[] { })]
+        [TestCase(new int[] { 1 }, 10, new int[] { 1 })]
+        [TestCase(new int[] { 1, 3, 2 }, 2, new int[] { 1, 2 })]
+        public void RemoveAllGreatThan(int[] elements, int removeNum, int[] expectedList)
+        {
+            IntMinHeap heap = new IntMinHeap();
+
+            foreach (int element in elements)
+            {
+                heap.Add(element);
+            }
+
+            heap.RemoveAll(obj => obj > removeNum);
+
+            List<int> numList = heap.GetList();
+
+            for (int i = 0; i < numList.Count; i++)
+            {
+                Assert.AreEqual(expectedList[i], numList[i]);
+            }
+        }
 
 
         // —————— 查询 ——————
@@ -154,9 +221,53 @@ namespace MtC.Tools.BinaryHeap
             Assert.AreEqual(false, heap.Contains(0));
         }
 
-        // TODO：Any，注意参数和 List 的 Any 一致
+        /// <summary>
+        /// 检测堆里是否有至少一个对象符合标准
+        /// </summary>
+        /// <param name="elements"></param>
+        /// <param name="removeNum"></param>
+        /// <param name="expectedResult"></param>
+        [Test]
+        [TestCase(new int[] { 1, 3, 5, 0, 8 }, 5, true)]
+        [TestCase(new int[] { }, 10, false)]
+        [TestCase(new int[] { 1, 3, 2 }, 100, false)]
+        public void AnyGreatThan(int[] elements, int removeNum, bool expectedResult)
+        {
+            IntMinHeap heap = new IntMinHeap();
 
-        // TODO：All，注意参数和 List 的 All 一致
+            foreach (int element in elements)
+            {
+                heap.Add(element);
+            }
+
+            bool checkResult = heap.Any(obj => obj > removeNum);
+
+            Assert.AreEqual(expectedResult, checkResult);
+        }
+
+        /// <summary>
+        /// 检测堆里是否所有对象都符合标准，如果列表为空会按照 <see cref="System.Collections.Generic.List{T}"/> 的方式返回
+        /// </summary>
+        /// <param name="elements"></param>
+        /// <param name="removeNum"></param>
+        /// <param name="expectedResult"></param>
+        [Test]
+        [TestCase(new int[] { 1, 3, 5, 0, 8 }, 5, false)]
+        [TestCase(new int[] { }, 10, true)]
+        [TestCase(new int[] { 1, 3, 2 }, -1, true)]
+        public void AllGreatThan(int[] elements, int removeNum, bool expectedResult)
+        {
+            IntMinHeap heap = new IntMinHeap();
+
+            foreach (int element in elements)
+            {
+                heap.Add(element);
+            }
+
+            bool checkResult = heap.All(obj => obj > removeNum);
+
+            Assert.AreEqual(expectedResult, checkResult);
+        }
 
         /// <summary>
         /// 获取整个对象列表

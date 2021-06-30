@@ -4,9 +4,8 @@ using System;
 
 namespace MtC.Tools.BinaryHeap
 {
-
     /// <summary>
-    /// 添加泛型，可以通过节点的 obj 获取到存入的对象
+    /// 二叉堆基类，需要注意这个基类不能根据存入的对象变化自动更新，需要手动调用更新方法
     /// </summary>
     /// <typeparam name="T"></typeparam>
     public abstract class BinaryHeap<T>
@@ -130,14 +129,18 @@ namespace MtC.Tools.BinaryHeap
         /// <param name="predicate"></param>
         public void RemoveAll(Predicate<T> predicate)
         {
-            // 对所有符合条件的元素进行删除
-            GetList().ForEach(obj =>
+            // 找出所有需要删除的节点
+            List<BinaryHeapNode> needRemoveNodes = nodes.Where(node => predicate(node.obj)).ToList();
+
+            // 使用根据索引删除的方式依次删除这些节点
+            needRemoveNodes.ForEach(node =>
             {
-                if (predicate(obj))
-                {
-                    Remove(obj);
-                }
+                RemoveAt(nodes.IndexOf(node));
             });
+
+            // 这里使用根据节点删除而不是根据对象删除是因为相同的对象可以多次存入堆占用多个节点
+            // 虽然一个节点只能删除一次，根据对象删多次实际上不会导致漏删
+            // 但这会产生一个 “疑似有的节点删多次有的节点没删掉” 的理解困难
         }
 
         /// <summary>
@@ -362,7 +365,50 @@ namespace MtC.Tools.BinaryHeap
         /// </summary>
         public void UpdateAll()
         {
+            Update(obj => true);
+        }
 
+        /// <summary>
+        /// 更新堆中所有符合标准的对象的排序，不提供根据对象更新第一个的功能，假设一个对象存入了两次，只更新一个比全都不更新错的更严重
+        /// </summary>
+        /// <param name="predicate"></param>
+        public void Update(Predicate<T> predicate)
+        {
+            // 筛选出需要更新的节点
+            List<BinaryHeapNode> needUpdateNodes = nodes.Where(node => predicate(node.obj)).ToList();
+
+            // 以按照索引的方式依次更新这些节点
+            needUpdateNodes.ForEach(node =>
+            {
+                UpdateAt(nodes.IndexOf(node));
+            });
+
+            // 更新可能导致节点顺序调整，这种情况下不能使用顺序更新或根据对象更新，只能使用根据节点更新以保证每个需要更新的节点都会更新到
+        }
+
+        /// <summary>
+        /// 更新指定的索引的节点
+        /// </summary>
+        /// <param name="updateNodeIndex"></param>
+        private void UpdateAt(int updateNodeIndex)
+        {
+            // 获取到节点
+            BinaryHeapNode node = nodes[updateNodeIndex];
+
+            // 计算出这个节点现在应该有的排序值
+            float currentSort = CalculateSort(node.obj);
+
+            // 排序值比记录的值小，需要向上更新
+            if(currentSort < node.sort)
+            {
+                BottomToTop(updateNodeIndex);
+            }
+
+            // 排序值比记录的值大，需要向下更新
+            if(currentSort > node.sort)
+            {
+                TopToBottom(updateNodeIndex);
+            }
         }
 
         /// <summary>

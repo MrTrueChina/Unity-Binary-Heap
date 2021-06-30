@@ -34,7 +34,7 @@ namespace MtC.Tools.BinaryHeap
 
                 public IntObject(int value)
                 {
-                    this.Value = value;
+                    Value = value;
                 }
             }
 
@@ -145,7 +145,30 @@ namespace MtC.Tools.BinaryHeap
 
         // All，注意参数和 List 的 All 一致
 
-        // 获取整个对象列表，是对象列表不是节点列表
+        /// <summary>
+        /// 获取整个对象列表
+        /// </summary>
+        /// <param name="elements"></param>
+        /// <param name="expectedList"></param>
+        [Test]
+        [TestCase(new int[] { 1, 2, 3 }, new int[] { 1, 2, 3 })]
+        [TestCase(new int[] { 1, 2, 0 }, new int[] { 0, 2, 1 })]
+        public void GetList(int[] elements, int[] expectedList)
+        {
+            IntMinHeap heap = new IntMinHeap();
+
+            foreach (int element in elements)
+            {
+                heap.Add(element);
+            }
+
+            List<int> numList = heap.GetList();
+
+            for (int i = 0; i < numList.Count; i++)
+            {
+                Assert.AreEqual(expectedList[i], numList[i]);
+            }
+        }
 
         /// <summary>
         /// 查询总元素数

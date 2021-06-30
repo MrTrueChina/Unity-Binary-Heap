@@ -38,12 +38,12 @@ namespace MtC.Tools.BinaryHeap
         protected List<BinaryHeapNode<T>> nodes = new List<BinaryHeapNode<T>>();
 
         /// <summary>
-        /// 比较两个节点，返回负数表示 节点a 更接近堆顶，返回正数表示 节点b 更接近堆顶，返回 0 表示两个节点比较上相同
+        /// 比较两个对象，返回负数表示 对象a 更接近堆顶，返回正数表示 对象b 更接近堆顶，返回 0 表示两个对象比较上相同
         /// </summary>
         /// <param name="a"></param>
         /// <param name="b"></param>
         /// <returns></returns>
-        protected abstract int Comparison(BinaryHeapNode<T> a, BinaryHeapNode<T> b);
+        protected abstract int Comparison(T a, T b);
 
         /// <summary>
         /// 添加对象到堆中
@@ -160,7 +160,7 @@ namespace MtC.Tools.BinaryHeap
                 int smallerChildIndex = FindSmallerChind(currentIndex);
 
                 //如果有子节点，并且比较小的子节点比当前节点更应该接近堆顶
-                if (smallerChildIndex > 0 && Comparison(nodes[smallerChildIndex], nodes[currentIndex]) < 0)
+                if (smallerChildIndex > 0 && Comparison(nodes[smallerChildIndex].obj, nodes[currentIndex].obj) < 0)
                 {
                     //交换当前节点和比较小的子节点
                     nodes.Swap(currentIndex, smallerChildIndex);
@@ -186,7 +186,7 @@ namespace MtC.Tools.BinaryHeap
             int currentIndex = startIndex;
 
             //现在正在调整的元素不是根元素，并且比父节更应该接近堆顶
-            while (currentIndex != 0 && Comparison(nodes[currentIndex], nodes[GetParentIndex(currentIndex)]) < 0)
+            while (currentIndex != 0 && Comparison(nodes[currentIndex].obj, nodes[GetParentIndex(currentIndex)].obj) < 0)
             {
                 //先保存父节点的索引
                 int parentIndex = GetParentIndex(currentIndex);
@@ -223,7 +223,7 @@ namespace MtC.Tools.BinaryHeap
             int rightChildIndex = GetRightChildIndex(parentIndex);
 
             // 返回更应该接近堆顶的那个，一样的话返回哪个都行
-            return Comparison(nodes[leftChildIndex], nodes[rightChildIndex]) < 0 ? leftChildIndex : rightChildIndex;
+            return Comparison(nodes[leftChildIndex].obj, nodes[rightChildIndex].obj) < 0 ? leftChildIndex : rightChildIndex;
         }
 
         /// <summary>

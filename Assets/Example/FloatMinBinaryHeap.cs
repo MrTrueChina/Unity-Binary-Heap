@@ -8,13 +8,13 @@ namespace MtC.Tools.BinaryHeap
 {
     public class FloatMinBinaryHeap : BinaryHeap<float>
     {
-        protected override int Comparison(BinaryHeapNode<float> a, BinaryHeapNode<float> b)
+        protected override int Comparison(float a, float b)
         {
-            if (a.obj - b.obj > 0)
+            if (a > b)
             {
                 return 1;
             }
-            else if (a.obj - b.obj < 0)
+            else if (a < b)
             {
                 return -1;
             }

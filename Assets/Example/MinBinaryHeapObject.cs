@@ -38,7 +38,7 @@ namespace MtC.Tools.BinaryHeap
         /// </summary>
         public void PrintBinaryHeapTopValue()
         {
-            displayText.text = "堆顶的元素：" + heap.GetTopNodeObject();
+            displayText.text = "堆顶的元素：" + heap.GetTop();
         }
 
         /// <summary>

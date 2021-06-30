@@ -14,8 +14,7 @@ namespace MtC.Tools.BinaryHeap
         /// <summary>
         /// 节点对象
         /// </summary>
-        /// <typeparam name="T"></typeparam>
-        protected class BinaryHeapNode<T>
+        protected class BinaryHeapNode
         {
             /// <summary>
             /// 这个节点对应的对象
@@ -35,7 +34,7 @@ namespace MtC.Tools.BinaryHeap
         /// <summary>
         /// 所有节点
         /// </summary>
-        protected List<BinaryHeapNode<T>> nodes = new List<BinaryHeapNode<T>>();
+        protected List<BinaryHeapNode> nodes = new List<BinaryHeapNode>();
 
         /// <summary>
         /// 比较两个对象，返回负数表示 对象a 更接近堆顶，返回正数表示 对象b 更接近堆顶，返回 0 表示两个对象比较上相同
@@ -52,7 +51,7 @@ namespace MtC.Tools.BinaryHeap
         public void Add(T obj)
         {
             // 创建节点
-            BinaryHeapNode<T> node = new BinaryHeapNode<T>(obj);
+            BinaryHeapNode node = new BinaryHeapNode(obj);
 
             // 加入到节点列表最后面，四叉树的结构导致越靠后的节点在越深的层，这样可以保证存到最底层
             nodes.Add(node);
@@ -65,7 +64,7 @@ namespace MtC.Tools.BinaryHeap
         /// 获取堆顶节点的对象
         /// </summary>
         /// <returns></returns>
-        public T GetTopNodeObject()
+        public T GetTop()
         {
             // 堆是空的，返回默认值，用默认值是因为有些对象不允许为空
             if (nodes.Count == 0)

@@ -401,12 +401,14 @@ namespace MtC.Tools.BinaryHeap
             // 排序值比记录的值小，需要向上更新
             if(currentSort < node.sort)
             {
+                node.sort = currentSort;
                 BottomToTop(updateNodeIndex);
             }
 
             // 排序值比记录的值大，需要向下更新
             if(currentSort > node.sort)
             {
+                node.sort = currentSort;
                 TopToBottom(updateNodeIndex);
             }
         }

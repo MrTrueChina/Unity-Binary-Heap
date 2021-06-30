@@ -45,24 +45,37 @@ namespace MtC.Tools.BinaryHeap
         }
 
         // —————— 存入 ——————
+        [Test]
+        [TestCase(new int[] { 1 }, new int[] { 1 })]
+        [TestCase(new int[] { 1, 2, 3 }, new int[] { 1, 2, 3 })]
+        [TestCase(new int[] { 1, 2, 0 }, new int[] { 0, 2, 1 })]
+        [TestCase(new int[] { 1, 1, 1 }, new int[] { 1, 1, 1 })]
+        public void Add(int[] elements, int[] expectedList)
+        {
+            IntMinHeap heap = new IntMinHeap();
 
-        // 特殊情况：只存入一个
+            foreach (int element in elements)
+            {
+                heap.Add(element);
+            }
 
-        // 标准情况，每次存入不同的内容
+            List<int> numList = heap.GetList();
 
-        // 存入相同的内容
-
-        // 存入虽然实际不同但比较相同的内容
+            for (int i = 0; i < numList.Count; i++)
+            {
+                Assert.AreEqual(expectedList[i], numList[i]);
+            }
+        }
 
 
         // —————— 删除 ——————
 
-        // 删除第一个指定的内容
+        // TODO：删除第一个指定的内容
 
-        // 删除所有符合要求的内容
-        // 极端情况：全删除
+        // TODO：删除所有符合要求的内容
+        // TODO：极端情况：全删除
 
-        // 删除不存在的内容
+        // TODO：删除不存在的内容
 
 
         // —————— 查询 ——————
@@ -141,9 +154,9 @@ namespace MtC.Tools.BinaryHeap
             Assert.AreEqual(false, heap.Contains(0));
         }
 
-        // Any，注意参数和 List 的 Any 一致
+        // TODO：Any，注意参数和 List 的 Any 一致
 
-        // All，注意参数和 List 的 All 一致
+        // TODO：All，注意参数和 List 的 All 一致
 
         /// <summary>
         /// 获取整个对象列表
@@ -152,7 +165,8 @@ namespace MtC.Tools.BinaryHeap
         /// <param name="expectedList"></param>
         [Test]
         [TestCase(new int[] { 1, 2, 3 }, new int[] { 1, 2, 3 })]
-        [TestCase(new int[] { 1, 2, 0 }, new int[] { 0, 2, 1 })]
+        [TestCase(new int[] { 1, 2, 3 }, new int[] { 1, 2, 3 })]
+        [TestCase(new int[] { }, new int[] { })]
         public void GetList(int[] elements, int[] expectedList)
         {
             IntMinHeap heap = new IntMinHeap();
@@ -194,12 +208,12 @@ namespace MtC.Tools.BinaryHeap
 
         // —————— 更新 ——————
 
-        // 有节点向上移动
+        // TODO：有节点向上移动
 
-        // 有节点向下移动
+        // TODO：有节点向下移动
 
-        // 有节点向上移动同时有节点向下移动
+        // TODO：有节点向上移动同时有节点向下移动
 
-        // 所有节点不动
+        // TODO：所有节点不动
     }
 }

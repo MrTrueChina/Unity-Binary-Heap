@@ -28,7 +28,7 @@ namespace MtC.Tools.BinaryHeap
         /// </summary>
         public void RemoveFirst()
         {
-            heap.RemoveFirstThroughObj(float.Parse(input.text));
+            heap.Remove(float.Parse(input.text));
 
             DisplayBinaryHeap();
         }

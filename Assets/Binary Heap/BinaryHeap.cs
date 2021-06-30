@@ -81,7 +81,7 @@ namespace MtC.Tools.BinaryHeap
         /// </summary>
         /// <param name="obj"></param>
         /// <returns>如果删除成功则返回 true，否则返回 false</returns>
-        public bool RemoveFirstThroughObj(T obj)
+        public bool Remove(T obj)
         {
             // 找到第一个是指定对象的节点
             int removeIndex = nodes.FindIndex(node => Equals(node.obj, obj));

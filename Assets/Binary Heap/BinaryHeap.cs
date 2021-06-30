@@ -61,7 +61,7 @@ namespace MtC.Tools.BinaryHeap
         }
 
         /// <summary>
-        /// 获取堆顶节点的对象
+        /// 获取堆顶对象
         /// </summary>
         /// <returns></returns>
         public T GetTop()
@@ -71,13 +71,13 @@ namespace MtC.Tools.BinaryHeap
             {
                 return default(T);
             }
-
+            
             // 二叉堆的结构决定了第一个节点就是堆顶
             return nodes[0].obj;
         }
 
         /// <summary>
-        /// 移除第一个指定的对象的节点
+        /// 移除第一个指定的对象
         /// </summary>
         /// <param name="obj"></param>
         /// <returns>如果删除成功则返回 true，否则返回 false</returns>
@@ -95,6 +95,22 @@ namespace MtC.Tools.BinaryHeap
             // 删除掉并返回删除成功
             RemoveAt(removeIndex);
             return true;
+        }
+
+        /// <summary>
+        /// 移除所有符合条件的对象
+        /// </summary>
+        /// <param name="predicate"></param>
+        public void RemoveAll(Predicate<T> predicate)
+        {
+            // 对所有符合条件的元素进行删除
+            GetList().ForEach(obj =>
+            {
+                if (predicate(obj))
+                {
+                    Remove(obj);
+                }
+            });
         }
 
         /// <summary>
@@ -282,7 +298,27 @@ namespace MtC.Tools.BinaryHeap
         /// <returns></returns>
         public bool Contains(T obj)
         {
-            return nodes.Any(node => Equals(node.obj, obj));
+            return Any(nodeObj => Equals(nodeObj, obj));
+        }
+
+        /// <summary>
+        /// 检测堆里是否有至少一个对象符合标准
+        /// </summary>
+        /// <param name="predicate"></param>
+        /// <returns></returns>
+        public bool Any(Predicate<T> predicate)
+        {
+            return nodes.Any(node => predicate(node.obj));
+        }
+
+        /// <summary>
+        /// 检测堆里是否所有对象都符合标准
+        /// </summary>
+        /// <param name="predicate"></param>
+        /// <returns></returns>
+        public bool All(Predicate<T> predicate)
+        {
+            return nodes.All(node => predicate(node.obj));
         }
 
         /// <summary>

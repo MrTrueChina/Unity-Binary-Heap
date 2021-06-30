@@ -289,7 +289,7 @@ namespace MtC.Tools.BinaryHeap
         /// 获取对象列表，需要注意由于二叉堆的特性，只有第一个对象是最符合标准的，后续对象是乱序
         /// </summary>
         /// <returns></returns>
-        public List<T> Objects()
+        public List<T> GetList()
         {
             return nodes.Select(node => node.obj).ToList();
         }

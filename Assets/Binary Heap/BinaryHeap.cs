@@ -287,6 +287,15 @@ namespace MtC.Tools.BinaryHeap
         }
 
         /// <summary>
+        /// 获取对象列表，需要注意由于二叉堆的特性，只有第一个对象是最符合标准的，后续对象是乱序
+        /// </summary>
+        /// <returns></returns>
+        public List<T> Objects()
+        {
+            return nodes.Select(node => node.obj).ToList();
+        }
+
+        /// <summary>
         /// 这个二叉堆是不是空的
         /// </summary>
         public bool IsEmpty

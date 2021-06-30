@@ -17,9 +17,9 @@ namespace MtC.Tools.BinaryHeap
         /// </summary>
         private class IntMinHeap : BinaryHeap<int>
         {
-            protected override int Comparison(int a, int b)
+            protected override float CalculateSort(int obj)
             {
-                return a - b;
+                return obj;
             }
         }
 
@@ -38,9 +38,9 @@ namespace MtC.Tools.BinaryHeap
                 }
             }
 
-            protected override int Comparison(IntObject a, IntObject b)
+            protected override float CalculateSort(IntObject obj)
             {
-                return a.Value - b.Value;
+                return obj.Value;
             }
         }
 

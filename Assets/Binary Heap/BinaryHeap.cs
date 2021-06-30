@@ -22,12 +22,37 @@ namespace MtC.Tools.BinaryHeap
             public T obj;
 
             /// <summary>
+            /// 排序值，这个值越小越接近堆顶
+            /// </summary>
+            public float sort;
+
+            /// <summary>
             /// 构造
             /// </summary>
             /// <param name="obj"></param>
             public BinaryHeapNode(T obj)
             {
                 this.obj = obj;
+            }
+
+            /// <summary>
+            /// 检测当前节点是否比指定节点更远离堆顶
+            /// </summary>
+            /// <param name="node"></param>
+            /// <returns></returns>
+            public bool LowerThan(BinaryHeapNode node)
+            {
+                return sort > node.sort;
+            }
+
+            /// <summary>
+            /// 检测当前节点是否比指定节点更接近堆顶
+            /// </summary>
+            /// <param name="node"></param>
+            /// <returns></returns>
+            public bool HigherThan(BinaryHeapNode node)
+            {
+                return sort < node.sort;
             }
         }
 
@@ -37,12 +62,11 @@ namespace MtC.Tools.BinaryHeap
         protected List<BinaryHeapNode> nodes = new List<BinaryHeapNode>();
 
         /// <summary>
-        /// 比较两个对象，返回负数表示 对象a 更接近堆顶，返回正数表示 对象b 更接近堆顶，返回 0 表示两个对象比较上相同
+        /// 计算一个对象的排序值，标准是：越接近堆顶的对象排序值越低
         /// </summary>
-        /// <param name="a"></param>
-        /// <param name="b"></param>
+        /// <param name="obj"></param>
         /// <returns></returns>
-        protected abstract int Comparison(T a, T b);
+        protected abstract float CalculateSort(T obj);
 
         /// <summary>
         /// 添加对象到堆中
@@ -52,6 +76,9 @@ namespace MtC.Tools.BinaryHeap
         {
             // 创建节点
             BinaryHeapNode node = new BinaryHeapNode(obj);
+
+            // 设置节点的排序值
+            node.sort = CalculateSort(node.obj);
 
             // 加入到节点列表最后面，四叉树的结构导致越靠后的节点在越深的层，这样可以保证存到最底层
             nodes.Add(node);
@@ -175,7 +202,7 @@ namespace MtC.Tools.BinaryHeap
                 int smallerChildIndex = FindSmallerChind(currentIndex);
 
                 //如果有子节点，并且比较小的子节点比当前节点更应该接近堆顶
-                if (smallerChildIndex > 0 && Comparison(nodes[smallerChildIndex].obj, nodes[currentIndex].obj) < 0)
+                if (smallerChildIndex > 0 && nodes[smallerChildIndex].HigherThan(nodes[currentIndex]))
                 {
                     //交换当前节点和比较小的子节点
                     nodes.Swap(currentIndex, smallerChildIndex);
@@ -201,7 +228,7 @@ namespace MtC.Tools.BinaryHeap
             int currentIndex = startIndex;
 
             //现在正在调整的元素不是根元素，并且比父节更应该接近堆顶
-            while (currentIndex != 0 && Comparison(nodes[currentIndex].obj, nodes[GetParentIndex(currentIndex)].obj) < 0)
+            while (currentIndex != 0 && nodes[currentIndex].HigherThan(nodes[GetParentIndex(currentIndex)]))
             {
                 //先保存父节点的索引
                 int parentIndex = GetParentIndex(currentIndex);
@@ -238,7 +265,7 @@ namespace MtC.Tools.BinaryHeap
             int rightChildIndex = GetRightChildIndex(parentIndex);
 
             // 返回更应该接近堆顶的那个，一样的话返回哪个都行
-            return Comparison(nodes[leftChildIndex].obj, nodes[rightChildIndex].obj) < 0 ? leftChildIndex : rightChildIndex;
+            return nodes[leftChildIndex].HigherThan(nodes[rightChildIndex]) ? leftChildIndex : rightChildIndex;
         }
 
         /// <summary>
@@ -328,6 +355,14 @@ namespace MtC.Tools.BinaryHeap
         public List<T> GetList()
         {
             return nodes.Select(node => node.obj).ToList();
+        }
+
+        /// <summary>
+        /// 更新堆中所有对象的排序
+        /// </summary>
+        public void UpdateAll()
+        {
+
         }
 
         /// <summary>

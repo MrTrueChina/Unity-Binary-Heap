@@ -8,20 +8,9 @@ namespace MtC.Tools.BinaryHeap
 {
     public class FloatMinBinaryHeap : BinaryHeap<float>
     {
-        protected override int Comparison(float a, float b)
+        protected override float CalculateSort(float obj)
         {
-            if (a > b)
-            {
-                return 1;
-            }
-            else if (a < b)
-            {
-                return -1;
-            }
-            else
-            {
-                return 0;
-            }
+            return obj;
         }
 
         /// <summary>

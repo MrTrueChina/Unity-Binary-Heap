@@ -17,9 +17,9 @@ namespace MtC.Tools.BinaryHeap
         /// </summary>
         private class IntMinHeap : BinaryHeap<int>
         {
-            protected override int Comparison(int a, int b)
+            protected override float CalculateSort(int obj)
             {
-                return a - b;
+                return obj;
             }
         }
 
@@ -30,7 +30,7 @@ namespace MtC.Tools.BinaryHeap
         {
             public class IntObject
             {
-                public int Value { get; private set; }
+                public int Value { get; set; }
 
                 public IntObject(int value)
                 {
@@ -38,9 +38,9 @@ namespace MtC.Tools.BinaryHeap
                 }
             }
 
-            protected override int Comparison(IntObject a, IntObject b)
+            protected override float CalculateSort(IntObject obj)
             {
-                return a.Value - b.Value;
+                return obj.Value;
             }
         }
 
@@ -319,12 +319,160 @@ namespace MtC.Tools.BinaryHeap
 
         // —————— 更新 ——————
 
-        // TODO：有节点向上移动
+        /// <summary>
+        /// 全部更新，有节点向上移动
+        /// </summary>
+        [Test]
+        public void UpdateAllUp()
+        {
+            IntObjectMinHeap heap = new IntObjectMinHeap();
 
-        // TODO：有节点向下移动
+            IntObjectMinHeap.IntObject oneObject = new IntObjectMinHeap.IntObject(1);
+            IntObjectMinHeap.IntObject twoObject = new IntObjectMinHeap.IntObject(2);
+            IntObjectMinHeap.IntObject threeObject = new IntObjectMinHeap.IntObject(3);
+            IntObjectMinHeap.IntObject fourObject = new IntObjectMinHeap.IntObject(4);
 
-        // TODO：有节点向上移动同时有节点向下移动
+            heap.Add(oneObject);
+            heap.Add(twoObject);
+            heap.Add(threeObject);
+            heap.Add(fourObject);
 
-        // TODO：所有节点不动
+            // 到这里是 1-4 存入，列表也是 1234
+
+            fourObject.Value = 0;
+            heap.UpdateAll();
+
+            // 4 换成 0，更新后应该是 0123
+
+            Assert.AreEqual(fourObject, heap.GetList()[0]);
+            Assert.AreEqual(oneObject, heap.GetList()[1]);
+            Assert.AreEqual(threeObject, heap.GetList()[2]);
+            Assert.AreEqual(twoObject, heap.GetList()[3]);
+        }
+
+        /// <summary>
+        /// 全部更新，有节点向下移动
+        /// </summary>
+        [Test]
+        public void UpdateAllDown()
+        {
+            IntObjectMinHeap heap = new IntObjectMinHeap();
+
+            IntObjectMinHeap.IntObject oneObject = new IntObjectMinHeap.IntObject(1);
+            IntObjectMinHeap.IntObject twoObject = new IntObjectMinHeap.IntObject(2);
+            IntObjectMinHeap.IntObject threeObject = new IntObjectMinHeap.IntObject(3);
+            IntObjectMinHeap.IntObject fourObject = new IntObjectMinHeap.IntObject(4);
+
+            heap.Add(oneObject);
+            heap.Add(twoObject);
+            heap.Add(threeObject);
+            heap.Add(fourObject);
+
+            // 到这里是 1-4 存入，列表也是 1234
+
+            oneObject.Value = 5;
+            heap.UpdateAll();
+
+            // 1 换成 5，更新后应该是 2435
+
+            Assert.AreEqual(twoObject, heap.GetList()[0]);
+            Assert.AreEqual(fourObject, heap.GetList()[1]);
+            Assert.AreEqual(threeObject, heap.GetList()[2]);
+            Assert.AreEqual(oneObject, heap.GetList()[3]);
+        }
+
+        /// <summary>
+        /// 全部更新，有节点向上移动同时有节点向下移动
+        /// </summary>
+        [Test]
+        public void UpdateAllUpDown()
+        {
+            IntObjectMinHeap heap = new IntObjectMinHeap();
+
+            IntObjectMinHeap.IntObject oneObject = new IntObjectMinHeap.IntObject(1);
+            IntObjectMinHeap.IntObject twoObject = new IntObjectMinHeap.IntObject(2);
+            IntObjectMinHeap.IntObject threeObject = new IntObjectMinHeap.IntObject(3);
+            IntObjectMinHeap.IntObject fourObject = new IntObjectMinHeap.IntObject(4);
+
+            heap.Add(oneObject);
+            heap.Add(twoObject);
+            heap.Add(threeObject);
+            heap.Add(fourObject);
+
+            // 到这里是 1-4 存入，列表也是 1234
+
+            oneObject.Value = 5;
+            fourObject.Value = 1;
+            heap.UpdateAll();
+
+            // 1 换成 5，4 换成 1，更新后应该是 1235
+
+            Assert.AreEqual(fourObject, heap.GetList()[0]);
+            Assert.AreEqual(twoObject, heap.GetList()[1]);
+            Assert.AreEqual(threeObject, heap.GetList()[2]);
+            Assert.AreEqual(oneObject, heap.GetList()[3]);
+        }
+
+        /// <summary>
+        /// 全部更新，所有节点都没变化
+        /// </summary>
+        [Test]
+        public void UpdateAllNone()
+        {
+            IntObjectMinHeap heap = new IntObjectMinHeap();
+
+            IntObjectMinHeap.IntObject oneObject = new IntObjectMinHeap.IntObject(1);
+            IntObjectMinHeap.IntObject twoObject = new IntObjectMinHeap.IntObject(2);
+            IntObjectMinHeap.IntObject threeObject = new IntObjectMinHeap.IntObject(3);
+            IntObjectMinHeap.IntObject fourObject = new IntObjectMinHeap.IntObject(4);
+
+            heap.Add(oneObject);
+            heap.Add(twoObject);
+            heap.Add(threeObject);
+            heap.Add(fourObject);
+
+            // 到这里是 1-4 存入，列表也是 1234
+
+            heap.UpdateAll();
+
+            // 不修改直接更新，更新后也应该是 1234
+
+            Assert.AreEqual(oneObject, heap.GetList()[0]);
+            Assert.AreEqual(twoObject, heap.GetList()[1]);
+            Assert.AreEqual(threeObject, heap.GetList()[2]);
+            Assert.AreEqual(fourObject, heap.GetList()[3]);
+        }
+
+        /// <summary>
+        /// 部分更新，有节点向上移动同时有节点向下移动，但只更新向上的那个节点
+        /// </summary>
+        [Test]
+        public void UpdateUp()
+        {
+            IntObjectMinHeap heap = new IntObjectMinHeap();
+
+            IntObjectMinHeap.IntObject oneObject = new IntObjectMinHeap.IntObject(1);
+            IntObjectMinHeap.IntObject twoObject = new IntObjectMinHeap.IntObject(2);
+            IntObjectMinHeap.IntObject threeObject = new IntObjectMinHeap.IntObject(3);
+            IntObjectMinHeap.IntObject fourObject = new IntObjectMinHeap.IntObject(4);
+
+            heap.Add(oneObject);
+            heap.Add(twoObject);
+            heap.Add(threeObject);
+            heap.Add(fourObject);
+
+            // 到这里是 1-4 存入，列表也是 1234
+
+            oneObject.Value = 5;
+            fourObject.Value = 0;
+            heap.Update(obj => obj.Value == 0);
+
+            // 1 换成 5，4 换成 0，但只更新换成 0 的，更新后应该是 0532
+
+            Assert.AreEqual(fourObject, heap.GetList()[0]);
+            Assert.AreEqual(oneObject, heap.GetList()[1]);
+            Assert.AreEqual(threeObject, heap.GetList()[2]);
+            Assert.AreEqual(twoObject, heap.GetList()[3]);
+        }
     }
 }

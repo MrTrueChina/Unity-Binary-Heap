@@ -2,7 +2,4 @@
 二叉堆是二叉树的一种变体，它旨在以较快的速度保证堆顶的元素最接近指定标准  
 需要注意二叉堆只能保证堆顶元素不论何时都是最符合标准的，其他元素并不像二叉树一样有序  
 
-## 演示场景没有演示全部功能，全部功能请看源码  
-
-## 完整使用手册：  
-## namespace： MtC.Tools.BinaryHeap  
+## 演示场景没有演示全部功能，全部功能请看[Wiki](https://github.com/MrTrueChina/Unity-Binary-Heap/wiki) 
